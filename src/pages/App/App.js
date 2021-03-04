@@ -1,21 +1,38 @@
-import {useState} from 'react'
+import { useState, useEffect } from 'react'
+import ipfsClient from 'ipfs-http-client'
 
 import logo from '../../assets/logo.svg'
 
-function App() {
-  const [file, setFile] = useState()
+const ipfs = ipfsClient({
+  host: 'ipfs.infura.io',
+  port: '5001',
+  protocol: 'https'
+})
+
+const App = () => {
+  const [buffer, setBuffer] = useState()
+  const [image, setImage] = useState('')
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0])
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-
+    const file = event.target.files[0]
     const reader = new window.FileReader()
     reader.readAsArrayBuffer(file)
     reader.onload = () => {
-      console.log(Buffer(reader.result))
+      setBuffer(Buffer(reader.result))
+    }
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    try {
+      const result = await ipfs.add(buffer)
+      
+      console.log("IPFS Result", result)
+      setImage(result.path)
+      console.log("Image URL", image)
+    } catch (error) {
+      console.log('IPFS Error', error)
     }
   }
 
@@ -31,10 +48,12 @@ function App() {
       </nav>
 
       <div className="container mx-auto">
-        <img className="object-none object-top object-center bg-yellow-300 w-24 h-24" src={logo} alt="logo" />
+        <img className="object-none object-top object-center bg-yellow-300 w-24 h-24 mt-6" src={image || logo} alt="logo" />
+
+        <h1 className="mt-6 text-2xl font-bold text-gray-900 text-center">Interplanetary File System</h1>
 
         <form onSubmit={handleSubmit}>
-          <input type="file" onChange={handleFileChange}/>
+          <input type="file" onChange={handleFileChange} />
           <button>Submit</button>
         </form>
       </div>
