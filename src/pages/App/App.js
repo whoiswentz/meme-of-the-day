@@ -27,10 +27,7 @@ const App = () => {
 
     try {
       const result = await ipfs.add(buffer)
-      
-      console.log("IPFS Result", result)
       setImage(result.path)
-      console.log("Image URL", image)
     } catch (error) {
       console.log('IPFS Error', error)
     }
@@ -48,7 +45,7 @@ const App = () => {
       </nav>
 
       <div className="container mx-auto">
-        <img className="object-none object-top object-center bg-yellow-300 w-24 h-24 mt-6" src={image || logo} alt="logo" />
+        <img className="object-none object-top object-center bg-yellow-300 w-24 h-24 mt-6" src={`https://ipfs.infura.io/ipfs/${image}`} alt="logo" />
 
         <h1 className="mt-6 text-2xl font-bold text-gray-900 text-center">Interplanetary File System</h1>
 
