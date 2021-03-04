@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import ipfsClient from 'ipfs-http-client'
-
-import logo from '../../assets/logo.svg'
 
 const ipfs = ipfsClient({
   host: 'ipfs.infura.io',
