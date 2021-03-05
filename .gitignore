@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+/src/abis/
 .pnp.js
 
 # testing
